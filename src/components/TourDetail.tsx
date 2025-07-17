@@ -1,3 +1,4 @@
+import { useParams } from "react-router-dom";
 import React, { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
@@ -36,7 +37,6 @@ import {
   Star,
 } from "lucide-react";
 import { format } from "date-fns";
-
 interface TourDetailProps {
   tour?: {
     id: string;
@@ -59,120 +59,131 @@ interface TourDetailProps {
   };
 }
 
-const TourDetail = ({ tour }: TourDetailProps) => {
+function TourDetail(props: TourDetailProps) {
+
+  const allTours = [
+    {
+      id: "1",
+      title: "Majestic Alps Adventure Tour",
+      description:
+        "Experience the breathtaking beauty of the Swiss Alps with our premium guided tour. Trek through stunning mountain landscapes, visit charming alpine villages, and enjoy authentic local cuisine. This all-inclusive package offers the perfect balance of adventure and relaxation in one of Europe's most picturesque regions.",
+      price: 1299,
+      duration: 7,
+      rating: 4.8,
+      reviewCount: 124,
+      location: "Swiss Alps, Switzerland",
+      images: [
+        "https://images.unsplash.com/photo-1527004013197-933c4bb611b3?w=800&q=80",
+        "https://images.unsplash.com/photo-1491555103944-7c647fd857e6?w=800&q=80",
+        "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=800&q=80",
+        "https://images.unsplash.com/photo-1486870591958-9b9d0d1dda99?w=800&q=80",
+      ],
+      included: [
+        "Professional English-speaking guide",
+        "6 nights accommodation in mountain lodges",
+        "All breakfasts and dinners",
+        "Transportation between locations",
+        "Hiking equipment rental",
+        "Entry fees to national parks",
+      ],
+      excluded: [
+        "International flights",
+        "Travel insurance",
+        "Personal expenses",
+        "Lunches and snacks",
+        "Optional activities",
+      ],
+      itinerary: [
+        {
+          day: 1,
+          title: "Arrival in Zurich",
+          description:
+            "Welcome to Switzerland! Transfer from Zurich Airport to your hotel in the city center. Evening welcome dinner with your tour group and guide briefing.",
+          activities: ["Airport transfer", "Welcome dinner", "Tour briefing"],
+        },
+        {
+          day: 2,
+          title: "Journey to Lucerne",
+          description:
+            "Morning departure to the beautiful city of Lucerne. Explore the historic old town and take a boat cruise on Lake Lucerne. Overnight in Lucerne.",
+          activities: [
+            "Guided city tour",
+            "Lake cruise",
+            "Free time for shopping",
+          ],
+        },
+        {
+          day: 3,
+          title: "Interlaken & Lauterbrunnen Valley",
+          description:
+            "Travel to Interlaken, situated between two alpine lakes. Continue to the spectacular Lauterbrunnen Valley, known for its 72 waterfalls.",
+          activities: [
+            "Scenic train journey",
+            "Waterfall hike",
+            "Cable car ride",
+          ],
+        },
+        {
+          day: 4,
+          title: "Grindelwald & First Mountain",
+          description:
+            "Full day exploring the Grindelwald area and First Mountain. Optional activities include the cliff walk, mountain cart, and zip-lining.",
+          activities: [
+            "First Cliff Walk",
+            "Mountain adventure activities",
+            "Alpine flora exploration",
+          ],
+        },
+        {
+          day: 5,
+          title: "Zermatt & Matterhorn Views",
+          description:
+            "Transfer to Zermatt, a car-free village at the foot of the iconic Matterhorn. Take the Gornergrat railway for spectacular mountain views.",
+          activities: [
+            "Gornergrat railway journey",
+            "Matterhorn viewing",
+            "Village exploration",
+          ],
+        },
+        {
+          day: 6,
+          title: "Alpine Hiking Day",
+          description:
+            "Choose from several guided hiking options based on your preference and fitness level. Enjoy a traditional Swiss fondue dinner in the evening.",
+          activities: [
+            "Guided hiking options",
+            "Alpine wildlife spotting",
+            "Swiss fondue experience",
+          ],
+        },
+        {
+          day: 7,
+          title: "Return to Zurich & Departure",
+          description:
+            "Morning at leisure before transferring back to Zurich. Tour concludes with airport drop-off or optional extension stay in Zurich.",
+          activities: [
+            "Souvenir shopping",
+            "Transfer to Zurich",
+            "Departure assistance",
+          ],
+        },
+      ],
+    },
+    // Add more tours here if needed
+  ];
+
+  const { id: paramId } = useParams();
   const [date, setDate] = useState<Date | undefined>(new Date());
   const [travelers, setTravelers] = useState(1);
 
-  // Default tour data if none is provided
-  const defaultTour = {
-    id: "1",
-    title: "Majestic Alps Adventure Tour",
-    description:
-      "Experience the breathtaking beauty of the Swiss Alps with our premium guided tour. Trek through stunning mountain landscapes, visit charming alpine villages, and enjoy authentic local cuisine. This all-inclusive package offers the perfect balance of adventure and relaxation in one of Europe's most picturesque regions.",
-    price: 1299,
-    duration: 7,
-    location: "Swiss Alps, Switzerland",
-    rating: 4.8,
-    reviewCount: 124,
-    images: [
-      "https://images.unsplash.com/photo-1527004013197-933c4bb611b3?w=800&q=80",
-      "https://images.unsplash.com/photo-1491555103944-7c647fd857e6?w=800&q=80",
-      "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=800&q=80",
-      "https://images.unsplash.com/photo-1486870591958-9b9d0d1dda99?w=800&q=80",
-    ],
-    included: [
-      "Professional English-speaking guide",
-      "6 nights accommodation in mountain lodges",
-      "All breakfasts and dinners",
-      "Transportation between locations",
-      "Hiking equipment rental",
-      "Entry fees to national parks",
-    ],
-    excluded: [
-      "International flights",
-      "Travel insurance",
-      "Personal expenses",
-      "Lunches and snacks",
-      "Optional activities",
-    ],
-    itinerary: [
-      {
-        day: 1,
-        title: "Arrival in Zurich",
-        description:
-          "Welcome to Switzerland! Transfer from Zurich Airport to your hotel in the city center. Evening welcome dinner with your tour group and guide briefing.",
-        activities: ["Airport transfer", "Welcome dinner", "Tour briefing"],
-      },
-      {
-        day: 2,
-        title: "Journey to Lucerne",
-        description:
-          "Morning departure to the beautiful city of Lucerne. Explore the historic old town and take a boat cruise on Lake Lucerne. Overnight in Lucerne.",
-        activities: [
-          "Guided city tour",
-          "Lake cruise",
-          "Free time for shopping",
-        ],
-      },
-      {
-        day: 3,
-        title: "Interlaken & Lauterbrunnen Valley",
-        description:
-          "Travel to Interlaken, situated between two alpine lakes. Continue to the spectacular Lauterbrunnen Valley, known for its 72 waterfalls.",
-        activities: [
-          "Scenic train journey",
-          "Waterfall hike",
-          "Cable car ride",
-        ],
-      },
-      {
-        day: 4,
-        title: "Grindelwald & First Mountain",
-        description:
-          "Full day exploring the Grindelwald area and First Mountain. Optional activities include the cliff walk, mountain cart, and zip-lining.",
-        activities: [
-          "First Cliff Walk",
-          "Mountain adventure activities",
-          "Alpine flora exploration",
-        ],
-      },
-      {
-        day: 5,
-        title: "Zermatt & Matterhorn Views",
-        description:
-          "Transfer to Zermatt, a car-free village at the foot of the iconic Matterhorn. Take the Gornergrat railway for spectacular mountain views.",
-        activities: [
-          "Gornergrat railway journey",
-          "Matterhorn viewing",
-          "Village exploration",
-        ],
-      },
-      {
-        day: 6,
-        title: "Alpine Hiking Day",
-        description:
-          "Choose from several guided hiking options based on your preference and fitness level. Enjoy a traditional Swiss fondue dinner in the evening.",
-        activities: [
-          "Guided hiking options",
-          "Alpine wildlife spotting",
-          "Swiss fondue experience",
-        ],
-      },
-      {
-        day: 7,
-        title: "Return to Zurich & Departure",
-        description:
-          "Morning at leisure before transferring back to Zurich. Tour concludes with airport drop-off or optional extension stay in Zurich.",
-        activities: [
-          "Souvenir shopping",
-          "Transfer to Zurich",
-          "Departure assistance",
-        ],
-      },
-    ],
-  };
-
-  const displayTour = tour || defaultTour;
+  // Find the tour by id from URL, or use prop, or fallback to first tour
+  let displayTour = props.tour;
+  if (!displayTour && paramId) {
+    displayTour = allTours.find((t) => t.id === paramId);
+  }
+  if (!displayTour) {
+    displayTour = allTours[0];
+  }
 
   const handleBookNow = () => {
     // Booking logic would go here
@@ -395,75 +406,80 @@ const TourDetail = ({ tour }: TourDetailProps) => {
                           {[...Array(5)].map((_, i) => (
                             <Star
                               key={i}
-                              className={`h-4 w-4 ${i < 5 ? "fill-yellow-400 text-yellow-400" : "text-gray-300"}`}
+                              className={`h-4 w-4 ${i < displayTour.rating ? "fill-yellow-400 text-yellow-400" : "text-gray-300"}`}
                             />
                           ))}
                         </div>
-                        <span className="ml-2 font-medium">
-                          Amazing experience!
-                        </span>
+                        <div className="container mx-auto px-4 py-8 bg-background">
+                          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                            {/* Left column - Tour details */}
+                            <div className="lg:col-span-2">
+                              <h1 className="text-3xl font-bold mb-2">{displayTour.title}</h1>
+                                {/* ... remaining code ... */}
+                              </div>
+                              {/* Right column - Booking widget */}
+                              <div>
+                                {/* ... booking widget code ... */}
+                              </div>
+                            </div>
+                          </div>
+                        );
+                        <p className="text-sm font-medium">
+                          export default TourDetail;
+                          Sarah T. - Traveled June 2023
+                        </p>
                       </div>
-                      <p className="text-sm text-muted-foreground mb-1">
-                        "The tour exceeded all my expectations. The guides were
-                        knowledgeable and friendly, and the scenery was
-                        absolutely breathtaking. I would highly recommend this
-                        tour to anyone looking for an unforgettable alpine
-                        adventure."
-                      </p>
-                      <p className="text-xs text-muted-foreground">
-                        Sarah T. - Traveled June 2023
-                      </p>
-                    </div>
 
-                    <div className="border-b border-border pb-4">
-                      <div className="flex items-center mb-2">
-                        <div className="flex">
-                          {[...Array(5)].map((_, i) => (
-                            <Star
-                              key={i}
-                              className={`h-4 w-4 ${i < 4 ? "fill-yellow-400 text-yellow-400" : "text-gray-300"}`}
-                            />
-                          ))}
+                      <div className="border-b border-border pb-4">
+                        <div className="flex items-center mb-2">
+                          <div className="flex">
+                            {[...Array(5)].map((_, i) => (
+                              <Star
+                                key={i}
+                                className={`h-4 w-4 ${i < 4 ? "fill-yellow-400 text-yellow-400" : "text-gray-300"}`}
+                              />
+                            ))}
+                          </div>
+                          <span className="ml-2 font-medium">
+                            Great tour, minor issues
+                          </span>
                         </div>
-                        <span className="ml-2 font-medium">
-                          Great tour, minor issues
-                        </span>
+                        <p className="text-sm text-muted-foreground mb-1">
+                          "Overall a fantastic experience with beautiful hiking
+                          trails and comfortable accommodations. The only downside
+                          was that some of the activities felt a bit rushed. Would
+                          still recommend though!"
+                        </p>
+                        <p className="text-xs text-muted-foreground">
+                          Michael R. - Traveled August 2023
+                        </p>
                       </div>
-                      <p className="text-sm text-muted-foreground mb-1">
-                        "Overall a fantastic experience with beautiful hiking
-                        trails and comfortable accommodations. The only downside
-                        was that some of the activities felt a bit rushed. Would
-                        still recommend though!"
-                      </p>
-                      <p className="text-xs text-muted-foreground">
-                        Michael R. - Traveled August 2023
-                      </p>
-                    </div>
 
-                    <div>
-                      <div className="flex items-center mb-2">
-                        <div className="flex">
-                          {[...Array(5)].map((_, i) => (
-                            <Star
-                              key={i}
-                              className={`h-4 w-4 ${i < 5 ? "fill-yellow-400 text-yellow-400" : "text-gray-300"}`}
-                            />
-                          ))}
+                      <div>
+                        <div className="flex items-center mb-2">
+                          <div className="flex">
+                            {[...Array(5)].map((_, i) => (
+                              <Star
+                                key={i}
+                                className={`h-4 w-4 ${i < 5 ? "fill-yellow-400 text-yellow-400" : "text-gray-300"}`}
+                              />
+                            ))}
+                          </div>
+                          <span className="ml-2 font-medium">
+                            Unforgettable journey
+                          </span>
                         </div>
-                        <span className="ml-2 font-medium">
-                          Unforgettable journey
-                        </span>
+                        <p className="text-sm text-muted-foreground mb-1">
+                          "This was the highlight of our European vacation. The
+                          Swiss Alps are stunning, and this tour provided the
+                          perfect way to experience them. The fondue dinner was a
+                          particular highlight, and our guide Marco was
+                          exceptional."
+                        </p>
+                        <p className="text-xs text-muted-foreground">
+                          Jennifer & David L. - Traveled September 2023
+                        </p>
                       </div>
-                      <p className="text-sm text-muted-foreground mb-1">
-                        "This was the highlight of our European vacation. The
-                        Swiss Alps are stunning, and this tour provided the
-                        perfect way to experience them. The fondue dinner was a
-                        particular highlight, and our guide Marco was
-                        exceptional."
-                      </p>
-                      <p className="text-xs text-muted-foreground">
-                        Jennifer & David L. - Traveled September 2023
-                      </p>
                     </div>
                   </div>
                 </CardContent>

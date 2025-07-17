@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { ChevronLeft, ChevronRight, Star } from "lucide-react";
 import { Button } from "./ui/button";
+import { Link } from "react-router-dom";
 import { Card, CardContent, CardFooter } from "./ui/card";
 import { Badge } from "./ui/badge";
 
@@ -130,8 +131,8 @@ const FeaturedTours: React.FC<FeaturedToursProps> = ({
                   </div>
                 </CardContent>
                 <CardFooter className="pt-0">
-                  <Button className="w-full" variant="default">
-                    View Details
+                  <Button asChild className="w-full" variant="default">
+                    <Link to={`/tours/${tour.id}`}>View Details</Link>
                   </Button>
                 </CardFooter>
               </Card>
